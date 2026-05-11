@@ -1,8 +1,6 @@
 services:
   mysql:
     image: mysql:9.6
-    ports:
-      - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
@@ -10,18 +8,32 @@ services:
       - MYSQL_PASSWORD=petclinic
       - MYSQL_DATABASE=petclinic
     volumes:
-      - "./conf.d:/etc/mysql/conf.d:ro"
+      - petclinic-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   java:
     build: .
     image: baselabouelnour/spring-petclinic:v1
     ports:
       - "8080:8080"
     depends_on:
-      - mysql
+      db:
+        condition: service_healthy
+    restart: on-failure
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/petclinic
       - SPRING_DATASOURCE_USERNAME=petclinic
       - SPRING_DATASOURCE_PASSWORD=petclinic
+      - SPRING_SQL_INIT_MODE=always          # forces schema+data SQL scripts to runc
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none         # prevents Hibernate from trying to create/validate the schema
+
+volumes:
+  petclinic-data:
+
 networks:
   default:
     name: petclinic-network
