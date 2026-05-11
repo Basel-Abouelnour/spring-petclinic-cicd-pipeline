@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set runner date
-        run: echo "RUN_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+        run: echo "RUN_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
       - uses: actions/checkout@v4
 
