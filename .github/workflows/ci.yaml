@@ -27,6 +27,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: baselabouelnour/spring-petclinic:${RUN_DATE}, baselabouelnour/spring-petclinic:latest
+          tags: baselabouelnour/spring-petclinic:$RUN_DATE, baselabouelnour/spring-petclinic:latest
 
 
