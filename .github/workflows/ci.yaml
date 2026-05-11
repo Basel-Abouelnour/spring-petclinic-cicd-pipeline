@@ -5,7 +5,26 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  build:
+  maven-compile-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+    steps:
+      - uses: actions/checkout@v4
+        
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          cache: maven
+
+      - name: compile with maven 
+        run: maven clean compile
+
+      - name: Test with maven
+        run: maven clean test
+
+  build-and-push-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Set runner date
