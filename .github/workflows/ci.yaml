@@ -21,13 +21,15 @@ jobs:
           cache: maven
 
       - name: compile with maven 
-        run: maven clean compile
+        run: mvn clean compile
 
       - name: Test with maven
-        run: maven clean test
+        run: mvn clean test
 
   build-and-push-docker:
     runs-on: ubuntu-latest
+    depends-on: maven-compile-and-test
+
     steps:
       - name: Set runner date
         run: echo "DATE_TAG=$(date +'%y%m%d')" >> $GITHUB_ENV
