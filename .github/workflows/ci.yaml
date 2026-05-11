@@ -27,7 +27,7 @@ jobs:
         run: mvn clean test
 
   build-and-push-docker:
-    runs-on: ubuntu-latest
+    needs: maven-compile-and-test
     depends-on: maven-compile-and-test
 
     steps:
