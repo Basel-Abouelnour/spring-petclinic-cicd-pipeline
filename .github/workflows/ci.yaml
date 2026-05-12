@@ -33,9 +33,14 @@ jobs:
   build-and-push-docker:
     runs-on: ubuntu-latest
     needs: maven-compile-and-test 
+    outputs:
+      date_tag: ${{ steps.set_date.outputs.date_tag }}
+
     steps:
+    
       - name: Set runner date
-        run: echo "DATE_TAG=$(date +'%y%m%d')" >> $GITHUB_ENV
+        id: set_date
+        run: echo "date_tag=$(date +'%y%m%d')" >> $GITHUB_OUTPUTS
 
       - uses: actions/checkout@v4
 
@@ -53,7 +58,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: baselabouelnour/spring-petclinic:${{ env.DATE_TAG }}, baselabouelnour/spring-petclinic:latest
+          tags: baselabouelnour/spring-petclinic:${{ needs.build-and-push-docker.outputs.date_tag }}, baselabouelnour/spring-petclinic:latest
 
   change-k8s-deployment-image:
     runs-on: ubuntu-latest
@@ -66,7 +71,7 @@ jobs:
 
       - name: Update image in k8s deployment file
         run: |
-          sed -i "s|image: baselabouelnour/spring-petclinic:.*|image: baselabouelnour/spring-petclinic:${{ env.DATE_TAG }}|g" k8s/petclinic.yml
+          sed -i "s|image: baselabouelnour/spring-petclinic:.*|image: baselabouelnour/spring-petclinic:${{ needs.build-and-push-docker.outputs.date_tag }}|g" k8s/petclinic.yml
 
 
       - name: Commit and push changes
