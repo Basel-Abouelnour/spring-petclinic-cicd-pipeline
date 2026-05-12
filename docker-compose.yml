@@ -1,5 +1,5 @@
 services:
-  db:
+  MySQL:
     image: mysql:9.6
     container_name: petclinic-db
     env_file:
@@ -9,16 +9,19 @@ services:
     #   MYSQL_DATABASE: petclinic
     #   MYSQL_USER: petclinic
     #   MYSQL_PASSWORD: petclinic
+
+    # I moved the environment variables to .app.env to avoid hardcoding them in the compose file.
+    # Just as a best practice.  
     volumes:
       - petclinic-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-upetclinic", "-ppetclinic"]
       interval: 10s
       timeout: 5s
-      retries: 10          # increased retries
+      retries: 5        # increased retries
       start_period: 30s    # give MySQL time before healthcheck even starts
 
-  app:
+  Application:
     build: .
     image: baselabouelnour/spring-petclinic:v1
     container_name: petclinic-app
@@ -31,9 +34,8 @@ services:
     #   MYSQL_USER: petclinic
     #   MYSQL_PASS: petclinic
     #   SPRING_SQL_INIT_MODE: always
-    #   SPRING_JPA_HIBERNATE_DDL_AUTO: none
     depends_on:
-      db:
+      MySQL:
         condition: service_healthy
     restart: on-failure    # if app starts before MySQL is ready, Docker will retry it
 
