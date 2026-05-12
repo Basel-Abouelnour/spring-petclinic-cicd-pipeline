@@ -6,6 +6,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   maven-compile-and-test:
     runs-on: ubuntu-latest
@@ -57,17 +60,19 @@ jobs:
     needs: build-and-push-docker
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Update image in k8s deployment file
         run: |
           sed -i "s|image: baselabouelnour/spring-petclinic:.*|image: baselabouelnour/spring-petclinic:${{ env.DATE_TAG }}|g" k8s/petclinic.yml
-          
+
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add k8s/petclinic.yml
-          git commit -m "Update image tag"
+          git commit -m "Update app version" || echo "No changes"
           git push
