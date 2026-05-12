@@ -17,8 +17,9 @@ spec:
         app: petclinic
     spec:
       containers:
-        - name: workload
+        - name: petclinic
           image: baselabouelnour/spring-petclinic:latest
+          # baselabouelnour/spring-petclinic:latest
           env:
             - name: MYSQL_URL
               valueFrom:
