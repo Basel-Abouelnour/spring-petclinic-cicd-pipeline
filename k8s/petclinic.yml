@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: petclinic
-          image: baselabouelnour/spring-petclinic:latest
+          image: baselabouelnour/spring-petclinic:
           # baselabouelnour/spring-petclinic:latest
           env:
             - name: MYSQL_URL
