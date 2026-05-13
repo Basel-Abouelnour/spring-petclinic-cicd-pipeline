@@ -42,7 +42,7 @@ jobs:
 
   build-and-push-docker:
     runs-on: ubuntu-latest
-    needs: maven-compile-and-test 
+    needs: [maven-compile-and-test, set-runner-date]
 
     steps:
       - uses: actions/checkout@v4
