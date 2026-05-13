@@ -72,10 +72,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Update image in k8s deployment file
+      - name: Update image tag in k8s/petclinic.yml 
+        env:
+          DATE_TAG: ${{ needs.set-runner-date.outputs.date_tag }}
         run: |
-          sed -i "s|image: baselabouelnour/spring-petclinic:.*|image: baselabouelnour/spring-petclinic:${{ needs.set-runner-date.outputs.date_tag }}|g" k8s/petclinic.yml
-
+         sed -i "s|image: baselabouelnour/spring-petclinic:.*|image: baselabouelnour/spring-petclinic:${DATE_TAG}|g" k8s/petclinic.yml
 
       - name: Commit and push changes
         run: |
