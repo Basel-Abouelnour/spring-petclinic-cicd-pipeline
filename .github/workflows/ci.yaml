@@ -26,9 +26,9 @@ jobs:
       - name: compile with maven 
         run: mvn clean compile
         
-      # comented tests to check failure
-      # - name: Test with maven
-      #   run: mvn clean test
+      comented tests to check failure
+      - name: Test with maven
+        run: mvn test
 
   build-and-push-docker:
     runs-on: ubuntu-latest
@@ -40,7 +40,7 @@ jobs:
     
       - name: Set runner date
         id: set_date
-        run: echo "date_tag=$(date +'%y%m%d')" >> $GITHUB_OUTPUTS
+        run: echo "date_tag=$(date +'%y%m%d')" >> $GITHUB_OUTPUT
 
       - uses: actions/checkout@v4
 
