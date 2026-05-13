@@ -65,7 +65,7 @@ jobs:
 
   change-k8s-deployment-image:
     runs-on: ubuntu-latest
-    needs: build-and-push-docker
+    needs: [build-and-push-docker, set-runner-date]
     steps:
       - uses: actions/checkout@v4
         with:
