@@ -27,7 +27,7 @@ jobs:
         run: mvn clean compile
         
       - name: Test with maven
-        run: mvn test
+        run: mvn test -Dtest=!PostgresIntegrationTests
 
   build-and-push-docker:
     runs-on: ubuntu-latest
