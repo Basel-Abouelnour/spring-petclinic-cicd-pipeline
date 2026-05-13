@@ -26,7 +26,6 @@ jobs:
       - name: compile with maven 
         run: mvn clean compile
         
-      comented tests to check failure
       - name: Test with maven
         run: mvn test
 
